@@ -1,0 +1,1 @@
+Bundled on-device OCR: Tesseract.js 7.0.0, Tesseract.js-core 7.0.0, English data @tesseract.js-data/eng 1.0.0. Source: https://github.com/naptha/tesseract.js. Images are processed locally. WASM is embedded in the wasm.js files. Included license files apply.
