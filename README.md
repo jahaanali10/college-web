@@ -59,3 +59,11 @@ Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API 
 ## Timetable reader v2
 
 Version 12 adds local adaptive image cleanup, modest-angle straightening, two full-image OCR passes, detected-grid/cell reading, stacked time headers, merged practical periods, stricter day recognition, and flagged noon/AM-PM handling. Crop margins, layout override, and cleanup controls are available before reading. Missing times remain blank for review rather than being fabricated. Reading still requires explicit review and retains duplicate/overlap validation. Tests include merged periods and angled/shadowed synthetic captures; unusual layouts and handwriting can still require corrections.
+
+
+## Accounts (version 14)
+Real Supabase email/password sign-in, signup, confirmation and password recovery.
+Existing device records stay in their original IndexedDB state key; account records use account UUID namespaces. New accounts start empty. Settings offers explicit confirmed merging of guest records into an account. No automatic migration or upload.
+Account writes require an internet connection and use a revision compare-and-swap to prevent overwriting another device's newer data. Offline cached account data is view-only. Use Load latest records after editing elsewhere. Guest mode remains offline and device-only. Sign out removes the local authentication session, not database records. Export backups remain available.
+Database schema: ../college-account-setup/setup.sql (run once). The project publishable key is public; no service role or secret key belongs in this app.
+Validation: actual unauthenticated read rejected, public email-auth settings checked, mocked two-user/save/conflict/offline tests and browser guest persistence checked. A real user's sign-in/verification/cloud write still requires end-to-end confirmation.

@@ -1,5 +1,5 @@
-import {readTimetablePhoto} from './ocr-reader.mjs?v=13';
-import {weekdays,parseTimetable,parseText,periodErrors,applyPeriods} from './timetable-parser.mjs?v=13';
+import {readTimetablePhoto} from './ocr-reader.mjs?v=14';
+import {weekdays,parseTimetable,parseText,periodErrors,applyPeriods} from './timetable-parser.mjs?v=14';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const id=()=>crypto.randomUUID(),blank=()=>({weekday:-1,title:'',start:'',end:'',room:'',kind:'lecture',review:'Enter the day and times'});
 const move=(list,item,direction)=>{const from=list.findIndex(x=>x.id===item),to=from+direction;if(from>=0&&to>=0&&to<list.length)[list[from],list[to]]=[list[to],list[from]];};
@@ -63,5 +63,5 @@ export function createPersonalisation(api){
   if(action==='period'){const row={...v,id:form.dataset.id||id(),weekday:+v.weekday};const existing=state().timetable.filter(p=>p.id!==form.dataset.id),issues=periodErrors([row],existing);if(issues.length){$('#period-error').textContent=issues.join('\n');return;}if(await api.change(s=>s.timetable=applyPeriods(existing,[row]),'Class saved'))api.closeDialog();}
   if(action==='import'){errors=periodErrors(rows,state().timetable,mode);if(!confirmed)errors.push('Check the review box before saving.');if(errors.length){$('#review-errors').innerHTML=errors.map(esc).join('<br>');$('#review-errors').scrollIntoView({behavior:'smooth',block:'center'});return;}const count=rows.length,firstDay=+rows[0].weekday;if(await api.change(s=>s.timetable=applyPeriods(s.timetable,rows,mode),`${count} reviewed classes saved`)){clearImport();api.navigate('timetable',firstDay);}}
  }catch(err){api.toast(err.message||'Could not save.');}});
- return {subjects,importView,settings,editPeriod,onNavigate:target=>{if(target!=='timetable-import'&&busy)cancelRead();}};
+ return {reset:async()=>{run++;busy=false;const active=worker;worker=null;if(active)await active.terminate().catch(()=>{});clearImport();},subjects,importView,settings,editPeriod,onNavigate:target=>{if(target!=='timetable-import'&&busy)cancelRead();}};
 }
