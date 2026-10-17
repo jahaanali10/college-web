@@ -1,13 +1,15 @@
 # College
 
-A personal, offline-capable college dashboard with a cream, olive and terracotta theme. No account, AI model, API subscription, analytics, or runtime libraries.
+A personal, offline-capable web version of the iPhone College app with a cream, olive and terracotta theme. No account, AI model, API subscription, analytics, or runtime libraries.
+
+The web interface follows the native Home, Spend, Income, History and Study tabs. Timetable, notices and the assistant open from the same quick access links. The browser cannot run the iPhone app’s background notice refresh; current notices open on the official college website.
 
 ## Included
 
 - Spending and income entries, searchable history, and one-step undo.
 - Calendar-week totals, net gain/loss, weekly budget, category totals.
 - 77 syllabus chapters with saved completion and search.
-- Personal timetable entry and import.
+- Personal timetable imported from the iPhone app.
 - Direct answers from your records.
 - JSON backup/export, validated import preview, duplicate-safe merge, and before-import restore.
 - iPhone Home Screen manifest and offline service worker.

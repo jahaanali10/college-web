@@ -1,4 +1,4 @@
-const BASE=new URL('./',self.location.href),PREFIX='college:'+BASE.pathname+':',CACHE=PREFIX+'v4';
+const BASE=new URL('./',self.location.href),PREFIX='college:'+BASE.pathname+':',CACHE=PREFIX+'v5';
 const FILES=['./','./index.html','./style.css','./app.js','./model.mjs','./manifest.webmanifest','./assets/syllabus.json','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES.map(f=>new URL(f,BASE).href))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil((async()=>{for(const key of await caches.keys()){if(key!==CACHE&&(key.startsWith(PREFIX)||(/^college-v\d+-/.test(key)&&key.endsWith(BASE.pathname))))await caches.delete(key);}await self.clients.claim();})());});
