@@ -8,13 +8,13 @@ The web interface follows the native Home, Spend, Income, History and Study tabs
 
 - Spending and income entries, searchable history, and one-step undo.
 - Calendar-week totals, net gain/loss, weekly budget, category totals.
-- 77 syllabus chapters with saved completion and search.
+- User-created subjects and chapters with saved completion and search.
 - Personal timetable imported from the iPhone app.
 - Direct answers from your records.
 - JSON backup/export, validated import preview, duplicate-safe merge, and before-import restore.
 - iPhone Home Screen manifest and offline service worker.
 
-The repository contains only generic app code and default syllabus content. Your financial records, personal timetable and backups must **never** be committed here. Records stay in IndexedDB on each device. There is no cross-device sync. Clearing site data, losing the device, changing the website origin or deleting the Home Screen app may make local records inaccessible. Keep exported backups in Files or another location you trust.
+The repository contains only generic app code and app assets. Your financial records, personal timetable and backups must **never** be committed here. Records stay in IndexedDB on each device. There is no cross-device sync. Clearing site data, losing the device, changing the website origin or deleting the Home Screen app may make local records inaccessible. Keep exported backups in Files or another location you trust.
 
 ## GitHub Pages
 
@@ -40,7 +40,7 @@ Imports keep existing entries, skip matching entry IDs, combine completed chapte
 
 ## Offline and notices
 
-Open the site online once and let offline setup complete. The app shell and syllabus are cached; changes to your records are saved locally. The official college notice board requires internet and opens externally. This static app cannot poll the college website while closed or send unattended new-notice alerts. Imported notices are snapshots.
+Open the site online once and let offline setup complete. The app shell is cached; changes to your records are saved locally. The official college notice board requires internet and opens externally. This static app cannot poll the college website while closed or send unattended new-notice alerts. Imported notices are snapshots.
 
 When changing files, bump the version in `sw.js`. A new service worker downloads a complete new shell before activating. Old app caches for this app path are then removed; IndexedDB records are not touched.
 
@@ -48,12 +48,10 @@ When changing files, bump the version in `sw.js`. A new service worker downloads
 
 Serve this folder using any local HTTP server, for example `python3 -m http.server 4173`. Open `http://localhost:4173`. Opening `index.html` directly with `file://` does not provide service workers or dependable module loading. A localhost preview is not the published iPhone URL.
 
-## Optional customisation
+## Optional customisation and empty first run
 
-Version 9 preserves the current setup by default, including all existing IndexedDB records. Open Backup & settings → Study & timetable tools → Enable customisation to expose subject/chapter editing and timetable-photo import. Keep current setup hides those tools again without deleting anything. The bundled Class 12 template adds missing subjects and chapters without resetting existing completion.
+New installations start with no subjects, chapters, timetable, notices or financial entries. There is no built-in syllabus or Class 12 template. Users add their own subjects/chapters, enter or photograph their timetable, or explicitly import their own College backup.
 
-Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API or uploaded images. The reader downloads on first use and its resources are cached as used. Printed English lists and standard grid orientations are supported; review and correction are required before saving. Add skips exact duplicates; replace covers the whole week and can be undone immediately. Backups include the customisation setting. Accounts and cloud sync have not been added.
+Existing saved records are loaded without reset. Backup & settings → Study & timetable tools offers Keep current setup or Enable customisation. Neither option deletes saved records. Accounts and cloud sync are not enabled.
 
-## First run
-
-Version 10 creates an empty syllabus, timetable, notice list, and finance history on a device with no saved College state. Customisation tools are enabled for that new empty setup. Existing IndexedDB state is loaded unchanged, with no reset or automatic template. The Class 12 template remains an explicit choice under Manage subjects. Login is not enabled in the live app.
+Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API or uploaded images. The reader downloads on first use and is cached as used. Printed English lists and standard grid orientations are supported; review/correction is required before saving. Add skips exact duplicates; replace covers the whole week and can be undone immediately.
