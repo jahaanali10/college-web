@@ -55,3 +55,7 @@ New installations start with no subjects, chapters, timetable, notices or financ
 Existing saved records are loaded without reset. Backup & settings → Study & timetable tools offers Keep current setup or Enable customisation. Neither option deletes saved records. Accounts and cloud sync are not enabled.
 
 Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API or uploaded images. The reader downloads on first use and is cached as used. Printed English lists and standard grid orientations are supported; review/correction is required before saving. Add skips exact duplicates; replace covers the whole week and can be undone immediately.
+
+## Timetable reader v2
+
+Version 12 adds local adaptive image cleanup, modest-angle straightening, two full-image OCR passes, detected-grid/cell reading, stacked time headers, merged practical periods, stricter day recognition, and flagged noon/AM-PM handling. Crop margins, layout override, and cleanup controls are available before reading. Missing times remain blank for review rather than being fabricated. Reading still requires explicit review and retains duplicate/overlap validation. Tests include merged periods and angled/shadowed synthetic captures; unusual layouts and handwriting can still require corrections.
