@@ -1,6 +1,6 @@
 # College
 
-A personal, offline-capable web version of the iPhone College app with a cream, olive and terracotta theme. No account, AI model, API subscription, analytics, or runtime libraries.
+A personal, offline-capable web version of the iPhone College app with a cream, olive and terracotta theme. No account, paid AI service, API subscription, or analytics. Timetable reading uses an optional bundled OCR library.
 
 The web interface follows the native Home, Spend, Income, History and Study tabs. Timetable, notices and the assistant open from the same quick access links. The browser cannot run the iPhone app’s background notice refresh; current notices open on the official college website.
 
@@ -47,3 +47,9 @@ When changing files, bump the version in `sw.js`. A new service worker downloads
 ## Local preview
 
 Serve this folder using any local HTTP server, for example `python3 -m http.server 4173`. Open `http://localhost:4173`. Opening `index.html` directly with `file://` does not provide service workers or dependable module loading. A localhost preview is not the published iPhone URL.
+
+## Optional customisation
+
+Version 9 preserves the current setup by default, including all existing IndexedDB records. Open Backup & settings → Study & timetable tools → Enable customisation to expose subject/chapter editing and timetable-photo import. Keep current setup hides those tools again without deleting anything. The bundled Class 12 template adds missing subjects and chapters without resetting existing completion.
+
+Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API or uploaded images. The reader downloads on first use and its resources are cached as used. Printed English lists and standard grid orientations are supported; review and correction are required before saving. Add skips exact duplicates; replace covers the whole week and can be undone immediately. Backups include the customisation setting. Accounts and cloud sync have not been added.
