@@ -1,0 +1,4 @@
+.DS_Store
+*.backup.json
+node_modules/
+playwright-report/
