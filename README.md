@@ -1,75 +1,74 @@
 # College
 
-A personal, offline-capable web version of the iPhone College app with a cream, olive and terracotta theme. No account, paid AI service, API subscription, or analytics. Timetable reading uses an optional bundled OCR library.
+### Spending, studies and attendance. One place for your college day.
 
-The web interface follows the native Home, Spend, Income, History and Study tabs. Timetable, notices and the assistant open from the same quick access links. The browser cannot run the iPhone app’s background notice refresh; current notices open on the official college website.
+Keep track of where your money goes, what you’re studying and which lectures you attend—with a personal timetable and a calm, mobile-friendly interface.
 
-## Included
+**[Open College →](https://jahaanali10.github.io/college-web/)** · [Report a bug or suggest a feature](https://github.com/jahaanali10/college-web/issues) · [Releases](https://github.com/jahaanali10/college-web/releases)
 
-- Spending and income entries, searchable history, and one-step undo.
-- Calendar-week totals, net gain/loss, weekly budget, category totals.
-- User-created subjects and chapters with saved completion and search.
-- Personal timetable imported from the iPhone app.
-- Direct answers from your records.
-- JSON backup/export, validated import preview, duplicate-safe merge, and before-import restore.
-- iPhone Home Screen manifest and offline service worker.
+No installation required. Try device-only mode, or create an account to save your records online. New users start with an empty workspace—your subjects and timetable are your own.
 
-The repository contains only generic app code and app assets. Your financial records, personal timetable and backups must **never** be committed here. Records stay in IndexedDB on each device. There is no cross-device sync. Clearing site data, losing the device, changing the website origin or deleting the Home Screen app may make local records inaccessible. Keep exported backups in Files or another location you trust.
+## What you can do
 
-## GitHub Pages
+| Your college day | What College helps you track |
+| --- | --- |
+| **Money** | Spending, income, weekly budgets, category breakdowns and weekly net gain or loss. |
+| **Study** | Your own subjects and chapters, completed work, search and progress. |
+| **Timetable** | Add classes manually or read a timetable photo, then review and correct the results. |
+| **Attendance** | Mark lectures attended, absent or cancelled. See overall and subject-wise percentages. |
+| **Your account** | Email sign-in, verification, password recovery and a personalised dashboard. |
+| **Backups** | Export your records, preview an import and merge without duplicating matching entries. |
 
-1. Create a public repository (for GitHub Free) and put these files in its root, keeping their folders intact. Use `main` as the default branch.
-2. Open repository **Settings → Pages**.
-3. Select **Deploy from a branch → main → /(root)** and Save. Alternatively select GitHub Actions and use the included workflow.
-4. Open the HTTPS Pages URL shown by GitHub, usually `https://USERNAME.github.io/REPOSITORY/`.
-5. Keep the same URL once you start entering records: browser storage is tied to its origin and app path.
+## A look inside
 
-The app uses relative paths, so a repository subpath works without build configuration. A custom domain is optional. Nothing here requires paid hosting. Do not put passwords, API keys, personal records, or exported backup files in the repository.
+Screenshots below use sample records, not a real student’s personal data.
 
-## iPhone setup and migration
+<table>
+<tr><td align="center"><strong>Your dashboard</strong></td><td align="center"><strong>Timetable & attendance</strong></td></tr>
+<tr><td><img src="./screenshot-dashboard.png" alt="College dashboard with a personal greeting, class count, study progress and balance" width="420"></td><td><img src="./screenshot-attendance.png" alt="Attendance tracker showing a percentage and attended, absent and cancelled controls" width="420"></td></tr>
+</table>
 
-1. **Keep the existing iPhone app installed.** The web app cannot automatically read another app's private data.
-2. In the updated iPhone College app, tap the export icon on Home, then **Export records to Files**.
-3. Open the published web app in Safari, choose **Share → Add to Home Screen**, and enable **Open as Web App** if shown.
-4. Open College from the Home Screen. Tap the backup icon → **Choose backup file**, select the saved JSON, review the counts, and choose **Merge records**.
-5. Check your balance, chapter count, and timetable. Keep a copy of the export.
+## Get started
 
-Import in the installed Home Screen version rather than a separate browser tab; their storage can differ. New web entries do not update the native app, and native edits do not automatically update the web app.
+1. **[Open College](https://jahaanali10.github.io/college-web/)** on your phone or computer.
+2. Choose **Use on this device**, or create an account and confirm your email.
+3. Add your own subjects and chapters in **Study → Manage subjects & chapters**.
+4. Open **Study → Timetable**, add your classes or import a photo, and start marking attendance.
+5. Add spending and income as you go. Keep a backup of your records.
 
-Imports keep existing entries, skip matching entry IDs, combine completed chapter states, merge timetable periods by day/time/title, and replace the weekly budget and week-start setting. Your before-import web state can be restored from Backup & settings. The timetable is intentionally empty on a fresh install: your personal schedule comes from your export or your own entries.
+On iPhone, open the site in Safari and choose **Share → Add to Home Screen**. Open the installed app online once to cache it for later use. Browser tabs and Home Screen apps can have separate storage, so import an existing backup inside the version you actually use.
 
-## Offline and notices
+## How attendance works
 
-Open the site online once and let offline setup complete. The app shell is cached; changes to your records are saved locally. The official college notice board requires internet and opens externally. This static app cannot poll the college website while closed or send unattended new-notice alerts. Imported notices are snapshots.
+Attendance is **attended ÷ (attended + absent)**. Cancelled classes and breaks do not count. Today’s unmarked lectures show a reminder on Home; after local midnight, they become absent when the app is open or next reopened. This is an in-app reminder, not a background push notification.
 
-When changing files, bump the version in `sw.js`. A new service worker downloads a complete new shell before activating. Old app caches for this app path are then removed; IndexedDB records are not touched.
+Tracking starts when you first open the attendance-enabled version; it does not penalise earlier lectures. Marks stay editable. After a gap between visits, intervening dates use your saved weekly timetable—correct holidays or changed classes with the date picker.
 
-## Local preview
+## Your records, your choice
 
-Serve this folder using any local HTTP server, for example `python3 -m http.server 4173`. Open `http://localhost:4173`. Opening `index.html` directly with `file://` does not provide service workers or dependable module loading. A localhost preview is not the published iPhone URL.
+- **Device-only mode:** records stay in this browser’s local storage database. Open online once to enable offline use. Clearing website data or losing the device can remove these records.
+- **Signed-in mode:** account records save to Supabase with user-specific access rules. An internet connection is required for editing; a previously cached account copy can be viewed offline. Choose **Load latest records** after editing on another device.
+- **Existing users:** signing in does not silently upload your device records. Settings offers **Copy this device’s records into my account**, with a confirmation first.
+- **Timetable photos:** OCR runs in the browser using Tesseract.js. Images are not uploaded for reading. Printed English works best; always check days, times and subjects before saving.
 
-## Optional customisation and empty first run
+The built-in assistant currently gives direct answers from app records; it is not a general-purpose AI chatbot. The app does not require a paid AI API. Hosted services have their own availability and usage limits.
 
-New installations start with no subjects, chapters, timetable, notices or financial entries. There is no built-in syllabus or Class 12 template. Users add their own subjects/chapters, enter or photograph their timetable, or explicitly import their own College backup.
+Personal records, passwords, secret API keys and backup exports do not belong in this public repository. Keep regular exported backups. The native iPhone app remains separate; records do not automatically move between it and the web app.
 
-Existing saved records are loaded without reset. Backup & settings → Study & timetable tools offers Keep current setup or Enable customisation. Neither option deletes saved records. Accounts and cloud sync are not enabled.
+## Run locally
 
-Timetable OCR runs on-device using bundled Tesseract.js 7.0.0, with no paid API or uploaded images. The reader downloads on first use and is cached as used. Printed English lists and standard grid orientations are supported; review/correction is required before saving. Add skips exact duplicates; replace covers the whole week and can be undone immediately.
+This is a static HTML/CSS/JavaScript app with no build step.
 
-## Timetable reader v2
+```sh
+python3 -m http.server 4173
+```
 
-Version 12 adds local adaptive image cleanup, modest-angle straightening, two full-image OCR passes, detected-grid/cell reading, stacked time headers, merged practical periods, stricter day recognition, and flagged noon/AM-PM handling. Crop margins, layout override, and cleanup controls are available before reading. Missing times remain blank for review rather than being fabricated. Reading still requires explicit review and retains duplicate/overlap validation. Tests include merged periods and angled/shadowed synthetic captures; unusual layouts and handwriting can still require corrections.
+Open [http://localhost:4173](http://localhost:4173). Use a local HTTP server rather than opening `index.html` directly. Device-only mode works without configuring a backend. The included account configuration points to the hosted College project; use your own Supabase project and database policies for a separate deployment. A publishable key can be public; database passwords, secret keys and service-role keys must stay private.
 
+The app shell is cached by a service worker. When publishing app changes, update the versioned assets and cache list together. App updates replace cached files without clearing the records database.
 
-## Accounts (version 14)
-Real Supabase email/password sign-in, signup, confirmation and password recovery.
-Existing device records stay in their original IndexedDB state key; account records use account UUID namespaces. New accounts start empty. Settings offers explicit confirmed merging of guest records into an account. No automatic migration or upload.
-Account writes require an internet connection and use a revision compare-and-swap to prevent overwriting another device's newer data. Offline cached account data is view-only. Use Load latest records after editing elsewhere. Guest mode remains offline and device-only. Sign out removes the local authentication session, not database records. Export backups remain available.
-Database schema: ../college-account-setup/setup.sql (run once). The project publishable key is public; no service role or secret key belongs in this app.
-Validation: actual unauthenticated read rejected, public email-auth settings checked, mocked two-user/save/conflict/offline tests and browser guest persistence checked. A real user's sign-in/verification/cloud write still requires end-to-end confirmation.
+## Feedback welcome
 
+Found a timetable the reader struggles with, or something that would make student life easier? **[Open an issue](https://github.com/jahaanali10/college-web/issues)** with the steps and expected result. Use sample data and remove personal information from screenshots.
 
-## Attendance (version 18)
-Timetable records dated lecture/practical attendance: attended, absent, cancelled or unmarked. Overall and subject percentages count attended / (attended + absent); breaks and cancelled classes are excluded. Home shows a persistent, non-blocking reminder for today's unmarked lectures. At local midnight, unmarked lectures become absent when the app is open or next reopened. No background server task or push notification is involved. Tracking starts when this version is first opened; previous lectures are not retrospectively penalised.
-Dated lecture snapshots retain history after recurring timetable edits. On reopening after a gap, intervening dates use the saved recurring timetable. Correct cancelled or changed lectures using the date picker. Automatic absences remain editable. Account data, device-only storage and backup imports/exports preserve attendance. Existing backups without attendance remain compatible.
-Validated: date rollover, first-use boundary, break exclusion, percentages, cancellation, snapshots, duplicate imports, backup roundtrip, legacy backups, browser marking/persistence and reminder disappearance.
+If College is useful to you, a star helps other students find the project.
