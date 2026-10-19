@@ -1,5 +1,5 @@
-import {preparePhoto,cropCell,separatorPresent} from './ocr-image.mjs?v=24';
-import {parseTimetable,matrixFromWords,describeGrid,parseGrid,extractionScore} from './timetable-parser.mjs?v=24';
+import {preparePhoto,cropCell,separatorPresent} from './ocr-image.mjs?v=26';
+import {parseTimetable,matrixFromWords,describeGrid,parseGrid,extractionScore} from './timetable-parser.mjs?v=26';
 const ink=(p,x0,y0,x1,y1)=>{let black=0,total=0;for(let y=Math.ceil(y0+5);y<y1-5;y+=2)for(let x=Math.ceil(x0+5);x<x1-5;x+=2){black+=p.mask[y*p.width+x]||0;total++;}return black/Math.max(1,total);};
 export async function readTimetablePhoto({file,rotation,crop,cleanup,layout,createWorker,onProgress,isCancelled,onWorker}){
  const p=await preparePhoto(file,rotation,crop,cleanup);if(isCancelled())return null;let stage='Reading the full timetable';const worker=await createWorker(m=>{if(m.status==='recognizing text'&&!isCancelled())onProgress(`${stage}… ${Math.round(m.progress*100)}%`);});onWorker(worker);
