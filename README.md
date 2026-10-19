@@ -82,3 +82,9 @@ Open **Study → Exams & portion**. New and existing accounts start with an empt
 The assistant reads saved exam records for dates, upcoming papers, days remaining, portions and unfinished topics. It remains an offline answer system, with no model or paid API calls. Each question is independent; suggested study order follows exam dates and unfinished topics, not predicted marks or difficulty.
 
 Run the exam regression checks with `node --test tests/exams.test.mjs`.
+
+### Study and timetable setup codes
+
+Study and Timetable each have **Add code** and **Create code** controls. Codes contain the setup itself, so they work offline without a paid backend or code registry. Preview before merging. Study codes exclude completion marks; timetable codes exclude attendance. No finances, account details or chats are included. Timetable imports reject overlaps; repeated imports skip existing topics/classes. The optional `MITHIBAI-SYJC-TERM1-2026` code also imports the terminal topics into Study when explicitly selected there; it is not a full-year syllabus.
+
+Exam topics are collapsed under **View portion** by default. The dropdown remains open while marking topics, and resets when the user switches accounts.
