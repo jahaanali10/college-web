@@ -1,4 +1,4 @@
-import {validateAttendance,mergeAttendance,validDay} from './attendance.mjs?v=18';
+import {validateAttendance,mergeAttendance,validDay} from './attendance.mjs?v=19';
 export const categories=['Food','Travel','Books & Supplies','Rent','Entertainment','Other'];
 export const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(n);
 export const cents=n=>Math.round(n*100);

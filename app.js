@@ -1,13 +1,14 @@
-import {dateKey,validDay,reconcileAttendance,attendanceStats,subjectAttendance} from './attendance.mjs?v=18';
-import {createAccounts} from './accounts.mjs?v=18';
-import {createPersonalisation} from './personalise.mjs?v=18';
-import {categories,money,cents,sum,uid,seedState,totals,studyTotals,periodRange,validateBackup,mergeState,answer} from './model.mjs?v=18';
+import {dateKey,validDay,reconcileAttendance,attendanceStats,subjectAttendance} from './attendance.mjs?v=19';
+import {createAccounts} from './accounts.mjs?v=19';
+import {createPersonalisation} from './personalise.mjs?v=19';
+import {categories,money,cents,sum,uid,seedState,totals,studyTotals,periodRange,validateBackup,mergeState,answer} from './model.mjs?v=19';
 const $=s=>document.querySelector(s),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const paths={home:'M3 10l9-7 9 7v10H3z M9 20v-7h6v7',history:'M4 4v6h6 M4 10a8 8 0 1 1 0 5 M12 7v5l3 2',study:'M3 5c4-2 6-2 9 0 3-2 5-2 9 0v15c-4-2-6-2-9 0-3-2-5-2-9 0z M12 5v15',timetable:'M4 5h16v16H4z M8 3v4 M16 3v4 M4 10h16',assistant:'M4 4h16v13H9l-5 4z M8 9h8 M8 13h5',plus:'M12 5v14 M5 12h14',backup:'M12 3v12 M7 8l5-5 5 5 M4 15v6h16v-6',trash:'M4 6h16 M9 6V3h6v3 M6 6l1 15h10l1-15 M10 10v7 M14 10v7',arrow:'M7 17L17 7 M7 7h10v10',food:'M5 3v7h6V3 M8 10v11 M18 3v18 M18 3c-4 3-4 8 0 8',coin:'M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18 M15 8H9v4h6v4H9 M12 6v12'};
 const icon=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[n]||paths.coin}"/></svg>`;
 const navItems=[['home','Home'],['spend','Spend'],['income','Income'],['history','History'],['study','Study']];
 let state,db,view='home',historyType='expense',historyPeriod='all',search='',studySearch='',selectedDay=new Date().getDay(),attendanceDate=dateKey(new Date()),undo=null,toastTimer,storageError='',pendingImport=null;
 let saving=false;
+let changeQueue=Promise.resolve();
 let categoryFilter='All',topic='Money',entryCategory='Food';const expanded=new Set(),hiddenCompleted=new Set();
 const personalisation=createPersonalisation({getState:()=>state,change,render,dialog,closeDialog,toast,navigate:(v,day)=>{if(Number.isInteger(day))selectedDay=day;view=v;render();window.scrollTo(0,0);}});
 const accounts=createAccounts({
@@ -19,6 +20,7 @@ const accounts=createAccounts({
  guest:async()=>{await resetSession();state=await readRaw('state');if(!state){state=seedState();state.personalisationEnabled=true;await writeLocal(state);}render();},
  clear:async()=>{await resetSession();state=null;},
  render,toast,
+ isSaving:()=>saving,
  copy:async()=>{const original=await readRaw('state');if(!original)throw Error('No device-only records are saved here.');const next=mergeState(state,validateBackup(original));await write(next,structuredClone(state));state=next;undo=null;},
 });
 async function resetSession(){await personalisation.reset();clearTimeout(toastTimer);$('#toast').style.display='none';if($('#entry-dialog').open)closeDialog();undo=null;pendingImport=null;search='';studySearch='';expanded.clear();hiddenCompleted.clear();view='home';attendanceDate=dateKey(new Date());selectedDay=new Date().getDay();queueAttendance();}
@@ -31,7 +33,17 @@ function read(key='state'){return readRaw(scopedKey(key));}
 async function write(next,previous=null){reconcileAttendance(next);await accounts.save(next);try{await writeLocal(next,previous);}catch(error){if(!accounts.id())throw error;toast('Saved online. This browser could not store an offline copy.');}}
 function writeLocal(next,previous=null){return new Promise((resolve,reject)=>{const tx=db.transaction('records','readwrite');tx.objectStore('records').put(next,scopedKey('state'));if(previous)tx.objectStore('records').put(previous,scopedKey('beforeImport'));tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}
 function toast(message,canUndo=false){clearTimeout(toastTimer);$('#toast').innerHTML=esc(message)+(canUndo?' <button data-action="undo">Undo</button>':'');$('#toast').style.display='block';toastTimer=setTimeout(()=>$('#toast').style.display='none',7000);}
-async function change(fn,message){if(saving){toast('Please wait for the current save.');return false;}if(storageError){toast('Storage is unavailable. Export a backup before continuing.');return false;}const next=structuredClone(state);saving=true;try{fn(next);await write(next);undo=state;state=next;render();if(message)toast(message,true);return true;}catch(e){toast('Could not save: '+e.message);return false;}finally{saving=false;}}
+function change(fn,message){
+ const task=changeQueue.then(async()=>{
+  if(storageError){toast('Storage is unavailable. Export a backup before continuing.');return false;}
+  const next=structuredClone(state);saving=true;
+  try{fn(next);await write(next);undo=state;state=next;render();if(message)toast(message,true);return true;}
+  catch(e){toast('Could not save: '+e.message);return false;}
+  finally{saving=false;}
+ });
+ changeQueue=task.catch(()=>{});
+ return task;
+}
 function queueAttendance(){setTimeout(syncAttendance,0);}
 async function syncAttendance(){if(!state||saving||!accounts.isApp())return;const candidate=structuredClone(state);if(reconcileAttendance(candidate))await change(s=>reconcileAttendance(s));}
 setInterval(syncAttendance,60000);
