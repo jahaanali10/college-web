@@ -72,3 +72,13 @@ The app shell is cached by a service worker. When publishing app changes, update
 Found a timetable the reader struggles with, or something that would make student life easier? **[Open an issue](https://github.com/jahaanali10/college-web/issues)** with the steps and expected result. Use sample data and remove personal information from screenshots.
 
 If College is useful to you, a star helps other students find the project.
+
+### Exams and portion
+
+Open **Study → Exams & portion**. New and existing accounts start with an empty exam list until they add subjects or import a schedule. Each exam subject has its own date, times, editable topic list and completion checkboxes. Exam topic completion is independent of the full study syllabus. Account storage, offline copies and export/import backups include these records.
+
+**Add code → `MITHIBAI-SYJC-TERM1-2026`** previews the Mithibai SYJC October 2026 first terminal schedule for Commerce with Secretarial Practice and IT, including the published portion. This is an optional public preset, not a private access code. Imports keep existing records and do not duplicate the same preset IDs.
+
+The assistant reads saved exam records for dates, upcoming papers, days remaining, portions and unfinished topics. It remains an offline answer system, with no model or paid API calls. Each question is independent; suggested study order follows exam dates and unfinished topics, not predicted marks or difficulty.
+
+Run the exam regression checks with `node --test tests/exams.test.mjs`.
