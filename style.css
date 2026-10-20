@@ -21,3 +21,5 @@ html,body{touch-action:pan-x pan-y}input,select,textarea,.composer input{font-si
 .exam-portion-dropdown{margin:14px 0}.exam-portion-dropdown>summary{cursor:pointer;padding:12px 0;font-weight:600}.exam-portion-dropdown .chapters{margin-top:6px}
 
 .entry-success{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;margin:8px 0 0;color:#465735;font-size:14px;opacity:0;transform:translateY(3px);transition:opacity .35s ease,transform .35s cubic-bezier(.2,.7,.2,1)}.entry-success.is-visible{opacity:1;transform:translateY(0)}.entry-success-check{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#566641;color:#fff;font-size:12px}.save-entry{transition:background-color .3s ease,box-shadow .3s ease,transform .18s ease,opacity .2s ease}.save-entry:active{transform:scale(.985)}.save-entry.is-saved{background:#566641;box-shadow:0 0 0 3px #56664114}.save-entry:disabled{opacity:.75}@media(prefers-reduced-motion:reduce){.entry-success,.save-entry{transition:none;transform:none}}
+
+.chat .message{scroll-margin-top:80px}
