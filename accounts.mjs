@@ -1,5 +1,5 @@
-import {createCodeStore} from './shared-codes.mjs?v=29';
-import {fetchWithTimeout} from './network.mjs?v=29';
+import {createCodeStore} from './shared-codes.mjs?v=30';
+import {fetchWithTimeout} from './network.mjs?v=30';
 import {SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY} from './supabase-config.mjs';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function createAccounts(api){

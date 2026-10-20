@@ -1,0 +1,11 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {examGroup,examGroups,examResults,validateExams,examAnswer} from '../exams.mjs';
+import {seedState,validateBackup,mergeState} from '../model.mjs';
+import {encodeSetup,decodeSetup} from '../setup-codes.mjs';
+const paper=(id,marks)=>({id,title:'First terminal exam',group:'Terminal 1',subject:id,date:'2026-10-19',start:'10:00',end:'12:00',portion:[],...(marks?{marks}:{})});
+test('four default sections and legacy terminal placement',()=>{assert.deepEqual(examGroups(seedState()),['Assessment 1','Terminal 1','Assessment 2','Terminal 2']);assert.equal(examGroup({title:'SYJC First Terminal Exam 2026'}),'Terminal 1');assert.deepEqual(examGroups({examGroups:[],exams:[]}),[]);});
+test('percentage uses total available marks and ignores missing results; zero counts',()=>{const r=examResults([paper('a',{earned:40,total:50}),paper('b',{earned:0,total:100}),paper('c')]);assert.equal(r.count,2);assert.equal(r.percentage,40/150*100);assert.equal(examResults([]).percentage,null);});
+test('reject invalid and incomplete marks',()=>{for(const marks of [{earned:-1,total:50},{earned:51,total:50},{earned:0,total:0},{earned:NaN,total:50},{earned:5,total:Infinity}])assert.throws(()=>validateExams([paper('a',marks)]));assert.equal(validateExams([paper('a',{earned:0,total:50})])[0].marks.earned,0);});
+test('backup keeps custom sections, marks, removed defaults and merged results',()=>{const s=seedState();s.examGroups=['Practice'];s.exams=[{...paper('a',{earned:45,total:50}),group:'Practice'}];const clean=validateBackup(s);assert.deepEqual(clean.examGroups,['Practice']);assert.deepEqual(clean.exams[0].marks,{earned:45,total:50});const current=seedState();current.exams=[paper('a')];assert.equal(mergeState(current,s).exams[0].marks.earned,45);});
+test('sharing keeps section name and excludes private marks',()=>{const s=seedState();s.exams=[paper('a',{earned:45,total:50})];const decoded=decodeSetup(encodeSetup(s,'exams'),'exams');assert.equal(decoded.data[0].group,'Terminal 1');assert.equal(decoded.data[0].marks,undefined);});
+test('assistant answers saved exam percentages',()=>{const s=seedState();s.exams=[paper('a',{earned:45,total:50})];assert.match(examAnswer(s,'what is my terminal 1 percentage'),/90.0%/);});

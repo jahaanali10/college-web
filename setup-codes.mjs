@@ -1,7 +1,7 @@
-import {normalizeShortCode} from './shared-codes.mjs?v=29';
-import {seedState,validateBackup,mergeState} from './model.mjs?v=29';
-import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=29';
-import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=29';
+import {normalizeShortCode} from './shared-codes.mjs?v=30';
+import {seedState,validateBackup,mergeState} from './model.mjs?v=30';
+import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=30';
+import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=30';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PREFIX='COLLEGE1-';
 const fields={study:'subjects',timetable:'timetable',exams:'exams'};
@@ -9,7 +9,7 @@ const labels={study:'subjects & chapters',timetable:'class timetable',exams:'exa
 export function encodeSetup(state,kind,name=''){
  if(typeof name!=='string'||name.trim().length>80)throw Error('Use a code name of up to 80 characters.');name=name.trim();
  if(!fields[kind])throw Error('Choose study, timetable or exams.');
- const data=kind==='study'?state.subjects.map(s=>({id:s.id,name:s.name,chapters:s.chapters.map(c=>({id:c.id,title:c.title,section:c.section??null,isCompleted:false}))})):kind==='exams'?(state.exams??[]).map(e=>({id:e.id,title:e.title,subject:e.subject,date:e.date,start:e.start,end:e.end,portion:e.portion.map(p=>({id:p.id,title:p.title,done:false}))})):state.timetable.map(p=>({id:p.id,weekday:p.weekday,title:p.title,start:p.start,end:p.end,room:p.room,kind:p.kind}));
+ const data=kind==='study'?state.subjects.map(s=>({id:s.id,name:s.name,chapters:s.chapters.map(c=>({id:c.id,title:c.title,section:c.section??null,isCompleted:false}))})):kind==='exams'?(state.exams??[]).map(e=>({id:e.id,...(e.group?{group:e.group}:{}),title:e.title,subject:e.subject,date:e.date,start:e.start,end:e.end,portion:e.portion.map(p=>({id:p.id,title:p.title,done:false}))})):state.timetable.map(p=>({id:p.id,weekday:p.weekday,title:p.title,start:p.start,end:p.end,room:p.room,kind:p.kind}));
  if(!data.length)throw Error(kind==='study'?'Add subjects and chapters before creating a code.':kind==='exams'?'Add exams and portion before creating a code.':'Add classes before creating a code.');
  const raw=JSON.stringify({version:1,kind,name,data}),bytes=new TextEncoder().encode(raw);if(bytes.length>300000)throw Error('This setup is too large for a code. Use a backup instead.');let binary='';for(const b of bytes)binary+=String.fromCharCode(b);
  return PREFIX+(name?(name.toUpperCase().replace(/[^A-Z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)||'SETUP')+'~':'')+btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
