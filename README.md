@@ -75,7 +75,7 @@ If College is useful to you, a star helps other students find the project.
 
 ### Exams and portion
 
-Open **Study → Exams & portion**. New and existing accounts start with an empty exam list until they add subjects or import a schedule. Each exam subject has its own date, times, editable topic list and completion checkboxes. Exam topic completion is independent of the full study syllabus. Account storage, offline copies and export/import backups include these records.
+Open **Study → Exams & portion**. New and existing accounts start with an empty exam list until they add subjects or import a schedule. Each exam subject has its own date, times, editable topic list and completion checkboxes. Matching chapters completed in Study also update exam portion; subjects and titles are matched conservatively. Account storage, offline copies and export/import backups include these records.
 
 **Add code → `MITHIBAI-SYJC-TERM1-2026`** previews the Mithibai SYJC October 2026 first terminal schedule for Commerce with Secretarial Practice and IT, including the published portion. This is an optional public preset, not a private access code. Imports keep existing records and do not duplicate the same preset IDs.
 
@@ -85,10 +85,10 @@ Run the exam regression checks with `node --test tests/exams.test.mjs`.
 
 ### Study and timetable setup codes
 
-Study and Timetable each have **Add code** and **Create code** controls. Codes contain the setup itself, so they work offline without a paid backend or code registry. Preview before merging. Study codes exclude completion marks; timetable codes exclude attendance. No finances, account details or chats are included. Timetable imports reject overlaps; repeated imports skip existing topics/classes. The optional `MITHIBAI-SYJC-TERM1-2026` code also imports the terminal topics into Study when explicitly selected there; it is not a full-year syllabus.
+Study, Timetable and Exams & portion each have **Add code** and **Create code** controls. New short codes use the existing Supabase project and need internet access. Older long codes contain the setup itself and remain importable offline. Preview before merging. Study and exam codes exclude completion marks; timetable codes exclude attendance. No finances, account details or chats are included. Timetable imports reject overlaps; repeated imports skip existing topics/classes. The optional `MITHIBAI-SYJC-TERM1-2026` code also imports the terminal topics into Study when explicitly selected there; it is not a full-year syllabus.
 
 Exam topics are collapsed under **View portion** by default. The dropdown remains open while marking topics, and resets when the user switches accounts.
 
 ### User-chosen short codes
 
-The short-code feature lets signed-in users choose an available 4–32 character code, such as `COMMERCE-A`. Run `supabase/setup-short-codes.sql` once in the existing Supabase project when setting up a new Supabase project. This creates separate shared-setup storage and two narrowly scoped functions. Existing account data is not changed. Creation requires authentication; exact-code lookup is available to anyone. Codes hold snapshots of the explicitly shared subjects/chapters or class timetable, not personal progress or finances. Codes are case-insensitive, cannot overwrite existing codes, and are limited to 25 per account. Legacy long codes and the built-in terminal preset remain importable. Short codes require internet access. The existing project has the database setup activated.
+The short-code feature lets signed-in users choose an available 4–32 character code, such as `COMMERCE-A`. Run `supabase/setup-short-codes.sql` once in the existing Supabase project when setting up a new Supabase project. This creates separate shared-setup storage and two narrowly scoped functions. Existing account data is not changed. Creation requires authentication; exact-code lookup is available to anyone. Codes hold snapshots of the explicitly shared subjects/chapters or class timetable or exam dates/portion, not personal progress or finances. Codes are case-insensitive, cannot overwrite existing codes, and are limited to 25 per account. Legacy long codes and the built-in terminal preset remain importable. Short codes require internet access. The existing project has the database setup activated.
