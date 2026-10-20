@@ -1,7 +1,7 @@
-import {normalizeShortCode} from './shared-codes.mjs?v=31';
-import {seedState,validateBackup,mergeState} from './model.mjs?v=31';
-import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=31';
-import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=31';
+import {normalizeShortCode} from './shared-codes.mjs?v=32';
+import {seedState,validateBackup,mergeState} from './model.mjs?v=32';
+import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=32';
+import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=32';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PREFIX='COLLEGE1-';
 const fields={study:'subjects',timetable:'timetable',exams:'exams'};
