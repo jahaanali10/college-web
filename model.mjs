@@ -1,5 +1,5 @@
-import {validateExams,examAnswer,DEFAULT_EXAM_GROUPS} from './exams.mjs?v=32';
-import {validateAttendance,mergeAttendance,validDay,attendanceStats} from './attendance.mjs?v=32';
+import {validateExams,examAnswer,DEFAULT_EXAM_GROUPS} from './exams.mjs?v=33';
+import {validateAttendance,mergeAttendance,validDay,attendanceStats} from './attendance.mjs?v=33';
 export const categories=['Food','Travel','Books & Supplies','Rent','Entertainment','Other'];
 export const money=n=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:2}).format(n);
 export const cents=n=>Math.round(n*100);

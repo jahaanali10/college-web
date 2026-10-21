@@ -92,3 +92,9 @@ Exam topics are collapsed under **View portion** by default. The dropdown remain
 ### User-chosen short codes
 
 The short-code feature lets signed-in users choose an available 4–32 character code, such as `COMMERCE-A`. Run `supabase/setup-short-codes.sql` once in the existing Supabase project when setting up a new Supabase project. This creates separate shared-setup storage and two narrowly scoped functions. Existing account data is not changed. Creation requires authentication; exact-code lookup is available to anyone. Codes hold snapshots of the explicitly shared subjects/chapters or class timetable or exam dates/portion, not personal progress or finances. Codes are case-insensitive, cannot overwrite existing codes, and are limited to 25 per account. Legacy long codes and the built-in terminal preset remain importable. Short codes require internet access. The existing project has the database setup activated.
+
+### Public code library
+
+Use **Browse public codes** in Study, Timetable or Exams to search published setups, filter their type and preview/import a copy. Guests can browse and import. Signed-in creators can publish an existing code with a title and description, edit their listing or unlist it. Older codes remain unlisted until their creator explicitly publishes them. Unlisting removes discovery, while the original exact code and previously imported copies remain available. Public snapshots exclude marks and chapter completion; account records are never listed.
+
+Database setup: run `supabase/setup-short-codes.sql` first, then `supabase/setup-code-market.sql`. The catalog exposes only listing metadata, never owner identifiers. All creation/edit/unlist operations check the signed-in owner on the server.

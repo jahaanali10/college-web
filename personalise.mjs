@@ -1,5 +1,5 @@
-import {readTimetablePhoto} from './ocr-reader.mjs?v=32';
-import {weekdays,parseTimetable,parseText,periodErrors,applyPeriods} from './timetable-parser.mjs?v=32';
+import {readTimetablePhoto} from './ocr-reader.mjs?v=33';
+import {weekdays,parseTimetable,parseText,periodErrors,applyPeriods} from './timetable-parser.mjs?v=33';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const id=()=>crypto.randomUUID(),blank=()=>({weekday:-1,title:'',start:'',end:'',room:'',kind:'lecture',review:'Enter the day and times'});
 const move=(list,item,direction)=>{const from=list.findIndex(x=>x.id===item),to=from+direction;if(from>=0&&to>=0&&to<list.length)[list[from],list[to]]=[list[to],list[from]];};
