@@ -98,3 +98,7 @@ The short-code feature lets signed-in users choose an available 4–32 character
 Use **Browse public codes** in Study, Timetable or Exams to search published setups, filter their type and preview/import a copy. Guests can browse and import. Signed-in creators can publish an existing code with a title and description, edit their listing or unlist it. Older codes remain unlisted until their creator explicitly publishes them. Unlisting removes discovery, while the original exact code and previously imported copies remain available. Public snapshots exclude marks and chapter completion; account records are never listed.
 
 Database setup: run `supabase/setup-short-codes.sql` first, then `supabase/setup-code-market.sql`. The catalog exposes only listing metadata, never owner identifiers. All creation/edit/unlist operations check the signed-in owner on the server.
+
+### Exam space
+
+The exam dashboard highlights the next upcoming paper, dates and portion progress. Sections collapse to keep the schedule compact; search and All/Upcoming/Done/Results filters narrow the list. Mark each paper done independently of preparation, and use Add marks/Edit marks to save obtained and maximum marks. Recorded percentages include only entered results. Completion and marks survive account saves/backups, and are excluded from shared setup codes.

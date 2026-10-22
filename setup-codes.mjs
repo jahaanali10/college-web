@@ -1,7 +1,7 @@
-import {normalizeShortCode} from './shared-codes.mjs?v=33';
-import {seedState,validateBackup,mergeState} from './model.mjs?v=33';
-import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=33';
-import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=33';
+import {normalizeShortCode} from './shared-codes.mjs?v=35';
+import {seedState,validateBackup,mergeState} from './model.mjs?v=35';
+import {scheduleForCode,SCHEDULE_CODE,validateExams} from './exams.mjs?v=35';
+import {periodErrors,applyPeriods,weekdays} from './timetable-parser.mjs?v=35';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const PREFIX='COLLEGE1-';
 const fields={study:'subjects',timetable:'timetable',exams:'exams'};
@@ -22,7 +22,7 @@ export function decodeSetup(code,kind){
  if(payload.version!==1||payload.kind!==kind||!Array.isArray(payload.data))throw Error('This is not a '+(labels[kind]||'matching setup')+' code. Use Add code in the matching section.');
  const shell=seedState();shell[fields[kind]]=payload.data;const clean=validateBackup(shell),data=clean[fields[kind]];if(!data.length)throw Error('The code contains an empty setup.');
  if(kind==='study'){const names=new Set();for(const s of data){const name=s.name.trim().toLowerCase();if(!name||names.has(name))throw Error('Subjects must have unique, non-empty names.');names.add(name);s.name=s.name.trim();for(const c of s.chapters){if(!c.title.trim())throw Error('Chapter names cannot be empty.');c.isCompleted=false;}}}
- else if(kind==='exams'){for(const e of data)for(const p of e.portion)p.done=false;}
+ else if(kind==='exams'){for(const e of data){delete e.completed;delete e.marks;for(const p of e.portion)p.done=false;}}
  else{const errors=periodErrors(data,[],'replace');if(errors.length)throw Error(errors.join('\n'));}
  const name=payload.name??'';if(typeof name!=='string'||name.length>80)throw Error('Invalid code name.');return {kind,name:name.trim(),data};
 }
