@@ -107,6 +107,6 @@ The exam dashboard highlights the next upcoming paper, dates and portion progres
 
 Open **Daily routine** from Home’s quick access. Add your own task names, notes and recurring weekdays; optional start/end times make a task appear in Home’s current-activity reminder. Untimed tasks remain available as an anytime checklist. Each date has separate completion, and future dates are previews. Home updates its reminder while open and refreshes when the tab becomes visible. Reminders use the device’s local time and are in-app only. Routine data saves with account records and backups; it is never included in public setup codes.
 
-Daily routine includes **Import code** and the offline preset **STUDY-GYM-9PM**: weekday tuition, one study session on Mon/Wed/Fri (21:00–22:30), two on Tue/Thu/Sat (13:30–15:00 and 21:00–22:30), none on Sunday, 2 hours of FIFA and 1 hour of gym. Preview the three weekday patterns before importing. Imports merge matching tasks and preserve daily ticks.
+Daily routine includes **Import code** and the offline preset **STUDY-GYM-9PM**: weekday tuition, one study session on Mon/Wed/Fri (14:00–15:30), two on Tue/Thu/Sat (13:30–15:00 and 21:00–22:30), none on Sunday, 2 hours of FIFA and 1 hour of gym. Preview the three weekday patterns before importing. Imports merge matching tasks and preserve daily ticks.
 
 Use **Clear schedule** in Daily routine to remove all repeating routine tasks and date ticks, with confirmation and immediate Undo. Re-importing STUDY-GYM-9PM updates weekday assignments on its existing preset tasks.
