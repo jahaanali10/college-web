@@ -102,3 +102,7 @@ Database setup: run `supabase/setup-short-codes.sql` first, then `supabase/setup
 ### Exam space
 
 The exam dashboard highlights the next upcoming paper, dates and portion progress. Sections collapse to keep the schedule compact; search and All/Upcoming/Done/Results filters narrow the list. Mark each paper done independently of preparation, and use Add marks/Edit marks to save obtained and maximum marks. Recorded percentages include only entered results. Completion and marks survive account saves/backups, and are excluded from shared setup codes.
+
+### Daily routine
+
+Open **Daily routine** from Home’s quick access. Add your own task names, notes and recurring weekdays; optional start/end times make a task appear in Home’s current-activity reminder. Untimed tasks remain available as an anytime checklist. Each date has separate completion, and future dates are previews. Home updates its reminder while open and refreshes when the tab becomes visible. Reminders use the device’s local time and are in-app only. Routine data saves with account records and backups; it is never included in public setup codes.
