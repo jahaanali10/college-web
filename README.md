@@ -110,3 +110,7 @@ Open **Daily routine** from Home’s quick access. Add your own task names, note
 Daily routine includes **Import code** and the offline preset **STUDY-GYM-9PM**: weekday tuition, one study session on Mon/Wed/Fri (14:00–15:30), two on Tue/Thu/Sat (13:30–15:00 and 21:00–22:30), none on Sunday, 2 hours of FIFA and 1 hour of gym. Preview the three weekday patterns before importing. Imports merge matching tasks and preserve daily ticks.
 
 Use **Clear schedule** in Daily routine to remove all repeating routine tasks and date ticks, with confirmation and immediate Undo. Re-importing STUDY-GYM-9PM updates weekday assignments on its existing preset tasks.
+
+### Friends
+
+Run `supabase/setup-friends.sql` in the project's Supabase SQL Editor before deploying this version. Signed-in users can open **Home → Friends** to generate their friend code, send requests, manage connections and opt into sharing subject names and chapter completion counts. Sharing is off by default and only applies to accepted friends. Friends and sharing preferences are account data stored separately from app backups.
