@@ -114,3 +114,5 @@ Use **Clear schedule** in Daily routine to remove all repeating routine tasks an
 ### Friends
 
 Run `supabase/setup-friends.sql` in the project's Supabase SQL Editor before deploying this version. Signed-in users can open **Home → Friends** to generate their friend code, send requests, manage connections and opt into sharing subject names and chapter completion counts. Sharing is off by default and only applies to accepted friends. Friends and sharing preferences are account data stored separately from app backups.
+
+Friends is accessible from the top bar. Signed-in users can browse all other accounts and request a friendship without exchanging codes. The directory shows display names, never email addresses. Progress sharing remains opt-in for accepted friends. Re-run the idempotent Friends SQL setup when upgrading from the code-only version.

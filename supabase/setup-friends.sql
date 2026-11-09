@@ -20,14 +20,19 @@ revoke all on college_social.profiles,college_social.requests from public,anon,a
 
 create or replace function public.college_friends(action text, target text default '')
 returns jsonb language plpgsql security definer set search_path='' as $$
-declare actor uuid:=auth.uid(); peer uuid; changed uuid; profile college_social.profiles%rowtype;
+declare actor uuid:=auth.uid(); peer uuid; changed uuid; profile college_social.profiles%rowtype; page_offset integer:=0;
 begin
  if actor is null then raise exception 'Sign in to use Friends.' using errcode='42501'; end if;
  insert into college_social.profiles(id) values(actor) on conflict(id) do nothing;
- if action='send' then
-  select id into peer from college_social.profiles where code=upper(btrim(target));
+ if action in ('send','send-user') then
+  if action='send-user' then
+   select id into peer from auth.users where id::text=target;
+  else
+   select id into peer from college_social.profiles where code=upper(btrim(target));
+  end if;
   if peer is null then raise exception 'Friend code not found. Ask them to open Friends first.'; end if;
-  if peer=actor then raise exception 'That is your own friend code.'; end if;
+  if peer=actor then raise exception 'You cannot send a request to yourself.'; end if;
+  insert into college_social.profiles(id) values(peer) on conflict(id) do nothing;
   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(actor::text,1));
   if (select count(*) from college_social.requests where sender=actor and not accepted)>=25 then raise exception 'Cancel a pending request before sending more.'; end if;
   insert into college_social.requests(sender,recipient) values(actor,peer) on conflict do nothing returning id into changed;
@@ -44,10 +49,22 @@ begin
   if changed is null then raise exception 'This connection is no longer available.'; end if;
  elsif action in ('share-on','share-off') then
   update college_social.profiles set sharing=(action='share-on') where id=actor;
+ elsif action='browse' then
+  if target is null or target !~ '^[0-9]{1,9}$' then raise exception 'Invalid directory page.'; end if;
+  page_offset:=target::integer;
  elsif action is distinct from 'list' then raise exception 'Unknown friends action.';
  end if;
  select * into profile from college_social.profiles where id=actor;
- return jsonb_build_object('code',profile.code,'sharing',profile.sharing,'connections',coalesce((
+ return jsonb_build_object('code',profile.code,'sharing',profile.sharing,'offset',page_offset,
+ 'suggestions',coalesce((
+  select jsonb_agg(jsonb_build_object('id',d.id,'name',d.name) order by d.id) from (
+   select u.id,coalesce(nullif(left(btrim(u.raw_user_meta_data->>'display_name'),80),''),'Student '||right(u.id::text,4)) as name
+   from auth.users u where u.id<>actor and not exists (
+    select 1 from college_social.requests r where least(r.sender,r.recipient)=least(actor,u.id) and greatest(r.sender,r.recipient)=greatest(actor,u.id)
+   )
+   order by u.id limit 31 offset page_offset
+  ) d
+ ),'[]'::jsonb),'connections',coalesce((
   select jsonb_agg(jsonb_build_object('id',r.id,'name',coalesce(nullif(left(btrim(u.raw_user_meta_data->>'display_name'),80),''),'Student '||right(p.code,4)),
    'status',case when r.accepted then 'friend' when r.sender=actor then 'outgoing' else 'incoming' end,
    'progress',case when r.accepted and p.sharing then (
