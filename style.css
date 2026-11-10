@@ -33,18 +33,7 @@ html,body{touch-action:pan-x pan-y}input,select,textarea,.composer input{font-si
 .routine-preset{margin-top:16px;line-height:1.7}.routine-code-preview{margin:18px 0}.routine-code-preview>summary{font-weight:600;cursor:pointer;padding:12px 0}.routine-preview-row{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:13px}.routine-preview-row>span{color:var(--muted);font-size:12px}
 
 .topbar-actions{display:flex;align-items:center;gap:4px}.friends-top{display:inline-flex;align-items:center;gap:4px;padding:8px 4px;font-size:12px;white-space:nowrap}.friends-top svg{width:17px;height:17px}.friends-top[aria-current=page]{color:var(--olive);font-weight:700}
-
-.routine-plan-header {
-  flex-wrap: wrap;
-  row-gap: 8px;
-}
-.routine-plan-header .actions {
-  flex-wrap: wrap;
-  min-width: 0;
-  max-width: 100%;
-}
-@media (max-width: 600px) {
-  .routine-plan-header .actions {
-    width: 100%;
-  }
-}
+.routine-setup {margin: 0 0 12px}
+.routine-setup summary {cursor: pointer; color: var(--olive); font-weight: 700}
+.routine-setup-actions {flex-wrap: wrap; min-width: 0; max-width: 100%}
+.routine-setup[open] .routine-setup-actions {margin-top: 12px}
