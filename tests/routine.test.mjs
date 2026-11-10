@@ -14,3 +14,19 @@ test('routine is excluded from study setup codes',()=>{const s=state();s.subject
 test('assistant answers current routine, tomorrow and unrelated questions',()=>{const s=state();assert.match(answer(s,'what should i be doing right now?',now),/Task a/);assert.match(routineAnswer(s,'my routine tomorrow',now),/No routine tasks/);assert.equal(routineAnswer(s,'Current balance',now),null);assert.match(routineAnswer(s,'my routine',now),/09:00–10:00/);});
 
 test('routine UI handlers save, complete, edit and remove tasks without changing unrelated records',async()=>{const listeners={};const originalDocument=globalThis.document,originalFormData=globalThis.FormData;let s=seedState(),html='',renders=0,closed=0;globalThis.document={addEventListener:(name,fn)=>listeners[name]=fn};globalThis.FormData=class{constructor(f){this.v=f.values;}get(k){return this.v[k]??'';}getAll(k){return this.v[k]??[];}};try{const {createRoutine}=await import('../routine.mjs');const api=createRoutine({getState:()=>s,render:()=>renders++,dialog:x=>html=x,closeDialog:()=>closed++,toast:()=>{},change:async fn=>{const next=structuredClone(s);fn(next);s=validateBackup(next);return true;}});const submit=async values=>{const button={disabled:false,isConnected:true};await listeners.submit({target:{id:'routine-task-form',values,querySelector:()=>button},preventDefault(){}});};await submit({title:'Exercise',notes:'A short walk',weekday:['0','1','2','3','4','5','6'],start:'08:00',end:'08:30'});assert.equal(s.routine.length,1);assert.equal(s.routine[0].weekdays.length,7);assert.equal(closed,1);const id=s.routine[0].id;const click=async data=>{const b={dataset:data,disabled:false,isConnected:true};await listeners.click({target:{closest:()=>b}});};await click({routine:'tick',id,date:routineDate(new Date())});assert.equal(s.routineChecks.length,1);await click({routine:'edit',id});assert.match(html,/Edit routine task/);assert.match(html,/Exercise/);await submit({recordId:id,title:'Morning walk',notes:'',weekday:['0','1','2','3','4','5','6'],start:'08:00',end:'08:45'});assert.equal(s.routine.length,1);assert.equal(s.routine[0].title,'Morning walk');assert.match(api.home(),/daily routine|routine/);await click({routine:'day',day:'1'});assert.equal(renders,1);await click({routine:'clear'});assert.match(html,/Clear the full weekly routine/);await click({routine:'confirm-clear'});assert.equal(s.routine.length,0);assert.equal(s.routineChecks.length,0);assert.deepEqual(s.expenses,[]);}finally{globalThis.document=originalDocument;globalThis.FormData=originalFormData;}});
+
+test('boards plan covers every date once, with separate BK tasks and no weekly repeats',async()=>{
+ const {boardsRoutine}=await import('../boards-routine.mjs');
+ const plan=boardsRoutine(), saved=validateBackup({...seedState(),routine:plan});
+ const main=plan.filter(t=>!t.title.startsWith('BK · '));
+ assert.equal(main.length,53);
+ assert.equal(new Set(main.map(t=>t.date)).size,53);
+ assert.equal(plan.length-main.length,17);
+ assert.match(routineForDate(saved,'2026-11-10')[0].title,/SP · Issue of Shares/);
+ assert.deepEqual(routineForDate(saved,'2026-11-11').map(t=>t.title),['SP · Issue of Shares','BK · Dissolution of Partnership Firm']);
+ assert.match(routineForDate(saved,'2027-01-01')[0].title,/Final syllabus check/);
+ assert.deepEqual(routineForDate(saved,'2027-01-02'),[]);
+ toggleRoutine(saved,main[0].id,main[0].date,new Date(2026,10,10,12));
+ assert.equal(routineForDate(saved,main[0].date)[0].done,true);
+ assert.equal(routineForDate(saved,'2026-11-17').some(t=>t.id===main[0].id),false);
+});

@@ -1,0 +1,95 @@
+const study = [
+  ['SP · Issue of Shares', 'Continue from your current section. Finish it and recall the steps without the book.'],
+  ['SP · Issue of Shares', 'Cover the next sections and compare the types or methods of issue.'],
+  ['SP · Issue of Shares', 'Finish the chapter, write one procedure from memory, and do textbook questions.'],
+  ['SP · Correspondence with Members', 'Learn the letter format and study the first examples.'],
+  ['SP · Correspondence with Members', 'Finish the examples and write two letters from prompts.'],
+  ['SP · Written practice', 'Time one Issue of Shares answer and one member letter. Correct both.'],
+  ['Buffer', 'Finish any SP spillover or take the day off.'],
+  ['Economics · Elasticity of Demand', 'Learn the types and draw the diagrams.'],
+  ['Economics · Elasticity of Demand', 'Finish measurement and solve textbook numericals.'],
+  ['Economics · Forms of Market', 'Compare the forms in a table and answer textbook questions.'],
+  ['OCM · Entrepreneurship Development', 'Study the first half and recall the main headings.'],
+  ['OCM · Entrepreneurship Development', 'Finish the chapter and write two answers from memory.'],
+  ['Economics and OCM · Practice', 'Redraw the elasticity diagrams, solve a numerical, and write an OCM answer.'],
+  ['Buffer', 'Catch up or take the day off.'],
+  ['IT · Computerised Accounting with GST', 'Start the theory and follow the first worked example.'],
+  ['IT · Computerised Accounting with GST', 'Continue the chapter and work through the accounting steps yourself.'],
+  ['IT · Computerised Accounting with GST', 'Finish the chapter and complete one practical independently.'],
+  ['Economics · Index Numbers', 'Learn the formulas and solve the worked examples.'],
+  ['Economics · Index Numbers', 'Finish the chapter and solve fresh questions without notes.'],
+  ['IT and Economics · Practice', 'Redo one GST task and two Index Numbers sums.'],
+  ['Buffer', 'Catch up or take the day off.'],
+  ['Economics · National Income', 'Learn the concepts and how the aggregates relate.'],
+  ['Economics · National Income', 'Finish the methods and do the textbook questions.'],
+  ['SP · Correspondence with Debentureholders', 'Study the examples and write a full letter from a prompt.'],
+  ['SP · Correspondence with Depositors', 'Study the examples, write a letter, and compare the formats.'],
+  ['OCM · Social Responsibilities of Business', 'Cover responsibilities towards the different groups.'],
+  ['OCM · Social Responsibilities of Business', 'Finish the chapter and write a long answer.'],
+  ['Buffer', 'Catch up or quiz yourself on National Income and SP letters.'],
+  ['SP · Financial Market', 'Learn the structure and cover the money market.'],
+  ['SP · Financial Market', 'Finish capital markets and write a comparison answer.'],
+  ['Economics · Money Market and Capital Market in India', 'Cover the money market and connect it to the SP chapter.'],
+  ['Economics · Money Market and Capital Market in India', 'Finish capital markets and do the textbook questions.'],
+  ['SP · Stock Exchange', 'Cover the meaning, functions, and first part of the chapter.'],
+  ['SP · Stock Exchange', 'Finish the chapter and write an answer without notes.'],
+  ['Buffer', 'Catch up or write one financial-market answer each for SP and Economics.'],
+  ['IT · Database Concepts using LibreOffice Base', 'Learn the basics and build a sample table.'],
+  ['IT · Database Concepts using LibreOffice Base', 'Work through the remaining theory and textbook examples.'],
+  ['IT · Database Concepts using LibreOffice Base', 'Complete a practical from scratch and fix any sticking points.'],
+  ['SP · Depository System', 'Learn the parties involved and sketch how the system works.'],
+  ['SP · Depository System', 'Finish the procedures and write one from memory.'],
+  ['SP · Dividend and Interest', 'Cover the concepts and make a comparison table.'],
+  ['SP · Dividend and Interest', 'Finish the chapter and write the exercise answers.'],
+  ['Economics · Public Finance in India', 'Cover the first half and organise the main terms in a table.'],
+  ['Economics · Public Finance in India', 'Finish the chapter and write one long answer.'],
+  ['Economics · Foreign Trade of India', 'Complete the chapter and write a short summary from memory.'],
+  ['IT · Enterprise Resource Planning', 'Finish the chapter and explain the modules and benefits without notes.'],
+  ['OCM · Consumer Protection', 'Learn consumer rights and responsibilities.'],
+  ['OCM · Consumer Protection', 'Finish redressal and do one case question.'],
+  ['SP and OCM · Catch-up', 'Clear unchecked chapters or do an SP letter and an OCM case.'],
+  ['Economics · Written check', 'Clear spillover, then do a diagram, a numerical, and a written answer.'],
+  ['IT · Practical check', 'Clear pending practicals and redo a GST task and a LibreOffice Base task.'],
+  ['Mixed written check', 'Pick your two weakest chapters and answer textbook questions under time.'],
+  ['Final syllabus check', 'Clear anything unchecked and list what to revisit in January.'],
+];
+
+const bk = [
+  ['11-11', 'Dissolution of Partnership Firm', 'Learn the accounts and entries.'],
+  ['11-13', 'Dissolution of Partnership Firm', 'Work through a solved problem.'],
+  ['11-15', 'Dissolution of Partnership Firm', 'Solve a full problem independently.'],
+  ['11-18', 'Bills of Exchange', 'Learn the basic entries.'],
+  ['11-20', 'Bills of Exchange', 'Practise the different cases.'],
+  ['11-22', 'Bills of Exchange', 'Solve a mixed problem under time.'],
+  ['11-25', 'Company Accounts – Issue of Shares', 'Practise application, allotment, and calls.'],
+  ['11-27', 'Company Accounts – Issue of Shares', 'Work through the remaining textbook cases.'],
+  ['11-29', 'Company Accounts – Issue of Shares', 'Solve a full problem independently.'],
+  ['12-02', 'Analysis of Financial Statements', 'Learn the formats and methods.'],
+  ['12-04', 'Analysis of Financial Statements', 'Work through the examples.'],
+  ['12-06', 'Analysis of Financial Statements', 'Solve a fresh exercise.'],
+  ['12-13', 'Mixed practice', 'Redo your weakest Dissolution or Bills problem.'],
+  ['12-20', 'Mixed practice', 'Do a Shares or Financial Statements problem under time.'],
+  ['12-23', 'Computer in Accounting', 'Study the chapter.'],
+  ['12-26', 'Computer in Accounting', 'Answer exercise questions from memory.'],
+  ['12-30', 'Catch-up', 'Clear spillover and redo your most common error.'],
+];
+
+function task(track, date, title, notes) {
+  return {
+    id: `boards-2027-${track}-${date}`,
+    date,
+    weekdays: [new Date(date + 'T12:00:00Z').getUTCDay()],
+    title,
+    notes,
+    start: '',
+    end: '',
+  };
+}
+
+export function boardsRoutine() {
+  const main = study.map(([title, notes], index) => {
+    const date = new Date(Date.UTC(2026, 10, 10 + index)).toISOString().slice(0, 10);
+    return task('main', date, title, notes);
+  });
+  return [...main, ...bk.map(([date, title, notes]) => task('bk', '2026-' + date, 'BK · ' + title, notes))];
+}
