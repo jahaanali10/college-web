@@ -1,5 +1,5 @@
 import {createFriends} from './friends.mjs?v=41';
-import {createRoutine} from './routine.mjs?v=41';
+import {createRoutine} from './routine.mjs?v=42';
 import {createCodeMarket} from './code-market.mjs?v=41';
 import {syncStudyToExams} from './study-exams.mjs?v=41';
 import {createSetupCodes} from './setup-codes.mjs?v=41';
